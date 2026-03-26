@@ -1,4 +1,5 @@
 /*
+  Justin Shaneman Edit
   Blink
   Drew Fry
   Turns an LED on for one second, then off for one second, repeatedly.
