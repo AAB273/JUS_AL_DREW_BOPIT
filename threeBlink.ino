@@ -48,3 +48,6 @@ void loop() {
     digitalWrite(A2, LOW);
   }     // wait for a second
 }
+
+
+// Alex Bogush
