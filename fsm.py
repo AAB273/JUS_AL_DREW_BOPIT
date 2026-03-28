@@ -1,4 +1,18 @@
+# FSM for Bop-It
+# 3 Actions involved:
+# Attack: Detects gesture from Accel/Gyro, bitmapped to 100
+# Block: Detects gesture from Acccel/Gyro, bitmapped to 010
+# Force: Detects computervision output, bitmapped to 001
+
+# FSM State Transitions
+# Power-On ---> Random Action State (Attack, Block, Force) --
+
+# While each state is occurring, the code will be detecting interrupts based
+# on reset input
+
+
 import random as r
+import asyncio as a
 
 level = 1  #10 Levels of Difficulty, 20 actions in each
 reset_button = 0
@@ -11,7 +25,6 @@ class OrderStateMachine:
             "block": self.block_state,
             "force": self.force_state,
             "power": self.power_state,
-            "reset": self.reset_state,
         }
         self.current_state = "power-on"
 
@@ -22,37 +35,32 @@ class OrderStateMachine:
             print(f"Invalid event: {event}")
 
     def attack_state(self, event):
-        if reset_button:
-            self.current_state = "reset"
-        else:
-            self.current_state = self.random_state_generator()
+        
+        
         return self.current_state
 
     def block_state(self, event):
-        if reset_button:
-            self.current_state = "reset"
-        else:
-            self.current_state = self.random_state_generator()
+
+
+
         return self.current_state
 
     def force_state(self, event):
-        if reset_button:
-            self.current_state = "reset"
-        else:
-            self.current_state = self.random_state_generator()
+
+
         return self.current_state
     
     def power_state(self, event):
         if reset_button:
             self.current_state = "reset"
-        else:
-            self.current_state = self.random_state_generator()
+
+
         return self.current_state
     
-    def reset_state(self, event):
-        level = 1
-        score = 0
-        return self.current_state
+    #def reset_state(self, event):
+        #level = 1
+        #score = 0
+        #return self.current_state
     
     def random_state_generator(self):
         num  = r.randint(0,2)
