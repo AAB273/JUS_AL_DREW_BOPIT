@@ -1,4 +1,4 @@
-HOSTNAME: lightsaber-pi-ALJUSDREW
-USERNAME: anakin
-PASSWORD: obi-wan
-KEYRING: Pitt2027!
+HOSTNAME: lightsaber-pi-ALJUSDREW  
+USERNAME: anakin  
+PASSWORD: obi-wan  
+KEYRING: Pitt2027!  
