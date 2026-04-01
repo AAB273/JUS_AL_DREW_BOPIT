@@ -1,3 +1,3 @@
-HOSTNAME: lightsaber-pi-ALJUSDREW \n
+HOSTNAME: lightsaber-pi-ALJUSDREW
 USERNAME: anakin
 PASSWORD: obi-wan
