@@ -4,12 +4,13 @@
 
 Adafruit_LSM6DSOX sox;
 
-#define TRIGGER_PIN 4
+#define START_PIN 4
 #define BAUD_RATE 9600
 #define LSM_ADDR 0x6A
 #define MLC0_SRC 0x70
 int signal = 0;
 int signal_sent = 0;
+int start_signal_sent = 0;
 
 
 void writeRegister(uint8_t reg, uint8_t val) { //I2C, it requires the Register value first, then writes the data into said register.
@@ -44,7 +45,7 @@ void setup() {
     delay(1000);
 
     // Put Bluefruit in data mode (exit AT command mode)
-    //Serial.println("+++");
+    // Serial.println("+++");
     delay(500);
     if (!sox.begin_I2C()) {
       while (1);  // hang if IMU not found
@@ -55,12 +56,11 @@ void setup() {
     sox.setAccelDataRate(LSM6DS_RATE_104_HZ);
     sox.setGyroDataRate(LSM6DS_RATE_104_HZ);
 
-    pinMode(TRIGGER_PIN, INPUT);
+    pinMode(START_PIN, INPUT);
 
     for(int i = 0; i < MEMS_CONF_ARRAY_LEN(mlc_conf_0); i++){
       writeRegister(mlc_conf_0[i].address, mlc_conf_0[i].data);
     }
-
 }
 
 void loop() {
@@ -73,20 +73,27 @@ void loop() {
     }
     else if (signal == 1 && !signal_sent){
         Serial.println("ATTACK");
+        start_signal_sent = 0;
         signal_sent = 1;
     }
     else if (signal == 2 && !signal_sent){
         Serial.println("BLOCK");
+        start_signal_sent = 0;
         signal_sent = 1;
     }
+    if (digitalRead(START_PIN) && !start_signal_sent){
+        Serial.println("START");
+        start_signal_sent = 1;
+    }
+    // CSV format: ax,ay,az,gx,gy,gz
+    // if(digitalRead(START_PIN) == HIGH){
+    // Serial.print(sensor.rawAccX * 1000, 4);  Serial.print(",");
+    // Serial.print(sensor.rawAccY * 1000, 4);  Serial.print(",");
+    // Serial.print(sensor.rawAccZ * 1000, 4);  Serial.print(",");
+    // Serial.print(sensor.rawGyroX * 1000, 4); Serial.print(",");
+    // Serial.print(sensor.rawGyroY * 1000, 4); Serial.print(",");
+    // Serial.println(sensor.rawGyroZ * 1000, 4);
+    // }
 
-    // // CSV format: ax,ay,az,gx,gy,gz
-    // Serial.print(accel.acceleration.x, 4); Serial.print(",");
-    // Serial.print(accel.acceleration.y, 4); Serial.print(",");
-    // Serial.print(accel.acceleration.z, 4); Serial.print(",");
-    // Serial.print(gyro.gyro.x, 4);          Serial.print(",");
-    // Serial.print(gyro.gyro.y, 4);          Serial.print(",");
-    // Serial.println(gyro.gyro.z, 4);
-
-  //delay(100);  // ~2.5Hz
+  delay(100);  // ~2.5Hz
 }
