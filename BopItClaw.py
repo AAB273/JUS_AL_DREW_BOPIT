@@ -261,12 +261,6 @@ def output():
 ble_buffer = ""
 
 def on_data(sender, data: bytearray):
-    """
-    Runs on the BLE callback thread — NOT the asyncio loop thread.
-    All FSM interactions must be marshaled onto the main loop with
-    call_soon_threadsafe, otherwise asyncio.create_task() inside the
-    FSM methods has no running loop and silently fails.
-    """
     global ble_buffer
     ble_buffer += data.decode("utf-8", errors="ignore")
     while True:
